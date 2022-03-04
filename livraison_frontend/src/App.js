@@ -6,7 +6,7 @@ import Livraison from "./components/Livraison";
 function App() {
   return (
     <div className="App">
-      <div class="bg-white">
+      <div className="bg-white">
         <Livraison />
       </div>
     </div>
