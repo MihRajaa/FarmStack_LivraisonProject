@@ -1,27 +1,17 @@
 import { Modal, Button } from "react-bootstrap";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AddLivraison } from "./AddLivraison";
 import LivraisonList from "./LivraisonList";
+import axios from "axios";
 
 const Livraison = () => {
-  const [livraison, setLivraison] = useState([
-    {
-      id: 1,
-      nomBoutique: "fsdf",
-      numCollier: "fsdfs",
-      pointDepart: "sdfffds",
-      pointArriver: "kldjf",
-      dimension: "idsjf",
-      conservation: "jkdsfh",
-      poids: "lkdsfj",
-    },
-  ]);
+  const [livraison, setLivraison] = useState([{}]);
 
-  // useEffect(() => {
-  //   axios.get().then((res) => {
-  //     setLivraison(res.data);
-  //   });
-  // });
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/livraisons").then((res) => {
+      setLivraison(res.data).catch((err) => console.log(err));
+    });
+  }, []);
 
   const [show, setShow] = useState(false);
 
@@ -57,11 +47,15 @@ const Livraison = () => {
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
-                {livraison.map((livraison) => (
-                  <tbody className="bg-white" key="k">
-                    <LivraisonList livraisons={livraison} />
-                  </tbody>
-                ))}
+                {livraison !== [] ? (
+                  livraison.map((livraison) => (
+                    <tbody className="bg-white" key={livraison.id}>
+                      <LivraisonList livraisons={livraison} />
+                    </tbody>
+                  ))
+                ) : (
+                  <tbody></tbody>
+                )}
               </table>
               <Modal show={show} onHide={handleClose}>
                 <Modal.Header className="bg-white" closeButton>

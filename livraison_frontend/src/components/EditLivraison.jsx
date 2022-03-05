@@ -1,30 +1,32 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 
-const EditLivraison = () => {
-  const [nom_boutique, setNom_boutique] = useState("");
-  const [num_collier, setNum_collier] = useState("");
-  const [point_depart, setPoint_depart] = useState("");
-  const [point_arriver, setPoint_arriver] = useState("");
-  const [conservation, setConservation] = useState("");
-  const [poids, setPoids] = useState("");
-  const [dimension, setDimension] = useState("");
+const EditLivraison = ({ livraison }) => {
+  const [nom_boutique, setNom_boutique] = useState(livraison.nomBoutique);
+  const [num_collier, setNum_collier] = useState(livraison.numCollier);
+  const [point_depart, setPoint_depart] = useState(livraison.pointDepart);
+  const [point_arriver, setPoint_arriver] = useState(livraison.pointArriver);
+  const [conservation, setConservation] = useState(livraison.conservation);
+  const [poids, setPoids] = useState(livraison.poids);
+  const [dimension, setDimension] = useState(livraison.dimension);
 
-  const updateLivraisonHandler = () => {
-    axios
-      .post("", {
-        nomBoutique: nom_boutique,
-        numCollier: num_collier,
-        pointDepart: point_depart,
-        pointArriver: point_arriver,
-        conservation: conservation,
-        poids: poids,
-        dimension: dimension,
-      })
+  const updateLivraisonHandler = async (id) => {
+    const data = {
+      nomBoutique: nom_boutique,
+      numCollier: num_collier,
+      pointDepart: point_depart,
+      pointArriver: point_arriver,
+      conservation: conservation,
+      poids: poids,
+      dimension: dimension,
+    };
+    await axios
+      .put(`http://127.0.0.1:8000/update_livraison/${id}`, data)
       .then((res) => {
-        console.log(res);
-      });
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
   };
   return (
     <>
@@ -46,6 +48,7 @@ const EditLivraison = () => {
                           id="form3Example1m"
                           className="form-control form-control-lg "
                           onChange={(e) => setNom_boutique(e.target.value)}
+                          defaultValue={livraison.nomBoutique}
                         />
                         <label
                           className="form-label bg-transparent"
@@ -62,6 +65,7 @@ const EditLivraison = () => {
                           id="form3Example1n"
                           className="form-control form-control-lg"
                           onChange={(e) => setNum_collier(e.target.value)}
+                          defaultValue={livraison.numCollier}
                         />
                         <label
                           className="form-label bg-transparent"
@@ -81,6 +85,7 @@ const EditLivraison = () => {
                           id="form3Example1m1"
                           className="form-control form-control-lg"
                           onChange={(e) => setPoint_depart(e.target.value)}
+                          defaultValue={livraison.pointDepart}
                         />
                         <label
                           className="form-label bg-transparent"
@@ -97,6 +102,7 @@ const EditLivraison = () => {
                           id="form3Example1n1"
                           className="form-control form-control-lg"
                           onChange={(e) => setPoint_arriver(e.target.value)}
+                          defaultValue={livraison.pointArriver}
                         />
                         <label
                           className="form-label bg-transparent"
@@ -116,6 +122,7 @@ const EditLivraison = () => {
                           id="form3Example1m1"
                           className="form-control form-control-lg"
                           onChange={(e) => setDimension(e.target.value)}
+                          defaultValue={livraison.dimension}
                         />
                         <label
                           className="form-label bg-transparent"
@@ -133,6 +140,7 @@ const EditLivraison = () => {
                           id="form3Example1n1"
                           className="form-control form-control-lg"
                           onChange={(e) => setPoids(e.target.value)}
+                          defaultValue={livraison.poids}
                         />
                         <label
                           className="form-label bg-transparent"
@@ -152,6 +160,7 @@ const EditLivraison = () => {
                           id="form3Example1n1"
                           className="form-control form-control-lg"
                           onChange={(e) => setConservation(e.target.value)}
+                          defaultValue={livraison.conservation}
                         />
                         <label
                           className="form-label bg-transparent"
@@ -169,16 +178,13 @@ const EditLivraison = () => {
         </section>
       </Modal.Body>
       <Modal.Footer className="bg-white">
-        <button type="button" className="btn btn-light btn-lg">
-          Effacer Tout
-        </button>
-        <button
+        <Button
           type="button"
           className="btn btn-warning btn-lg ms-2"
-          onClick={updateLivraisonHandler}
+          onClick={() => updateLivraisonHandler(livraison.id)}
         >
           Soumettre
-        </button>
+        </Button>
       </Modal.Footer>
     </>
   );

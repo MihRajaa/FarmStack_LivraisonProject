@@ -1,22 +1,31 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import EditLivraison from "./EditLivraison";
 
-const LivraisonList = (props) => {
+const LivraisonList = ({ livraisons }) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const deleteLivraisonHandler = async (id) => {
+    await axios
+      .delete(`http://127.0.0.1:8000/delete_livraion/${id}`)
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <>
       <tr className="bg-white">
-        <td>{props.livraisons.nomBoutique}</td>
-        <td>{props.livraisons.numClollier}</td>
-        <td>{props.livraisons.pointDepart}</td>
-        <td>{props.livraisons.pointArriver}</td>
-        <td>{props.livraisons.dimension}</td>
-        <td>{props.livraisons.conservation}</td>
-        <td>{props.livraisons.poids}</td>
+        <td>{livraisons.nomBoutique}</td>
+        <td>{livraisons.numCollier}</td>
+        <td>{livraisons.pointDepart}</td>
+        <td>{livraisons.pointArriver}</td>
+        <td>{livraisons.dimension}</td>
+        <td>{livraisons.conservation}</td>
+        <td>{livraisons.poids}</td>
         <td>
           <Button
             type="button"
@@ -25,16 +34,21 @@ const LivraisonList = (props) => {
           >
             Modifier
           </Button>
-          <button type="button" className="btn btn-danger m-1">
+          <Button
+            type="button"
+            className="btn btn-danger m-1"
+            onClick={() => deleteLivraisonHandler(livraisons.id)}
+          >
             Supprimer
-          </button>
+          </Button>
         </td>
       </tr>
+
       <Modal show={show} onHide={handleClose}>
         <Modal.Header className="bg-white" closeButton>
           <Modal.Title></Modal.Title>
         </Modal.Header>
-        <EditLivraison />
+        <EditLivraison livraison={livraisons} />
       </Modal>
     </>
   );

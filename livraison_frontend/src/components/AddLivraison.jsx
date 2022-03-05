@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 
 export const AddLivraison = () => {
   const [nom_boutique, setNom_boutique] = useState("");
@@ -13,7 +13,7 @@ export const AddLivraison = () => {
 
   const addLivraisonHandler = () => {
     axios
-      .post("", {
+      .post("http://127.0.0.1:8000/livraison", {
         nomBoutique: nom_boutique,
         numCollier: num_collier,
         pointDepart: point_depart,
@@ -24,7 +24,8 @@ export const AddLivraison = () => {
       })
       .then((res) => {
         console.log(res);
-      });
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -167,16 +168,13 @@ export const AddLivraison = () => {
       </Modal.Body>
 
       <Modal.Footer className="bg-white">
-        <button type="button" className="btn btn-light btn-lg">
-          Effacer Tout
-        </button>
-        <button
+        <Button
           type="button"
           className="btn btn-warning btn-lg ms-2"
           onClick={addLivraisonHandler}
         >
           Soumettre
-        </button>
+        </Button>
       </Modal.Footer>
     </>
   );
