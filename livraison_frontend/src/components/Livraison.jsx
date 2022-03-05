@@ -7,10 +7,13 @@ import axios from "axios";
 const Livraison = () => {
   const [livraison, setLivraison] = useState([{}]);
 
-  useEffect(() => {
-    axios.get("http://127.0.0.1:8000/livraisons").then((res) => {
-      setLivraison(res.data).catch((err) => console.log(err));
-    });
+  useEffect(async () => {
+    await axios
+      .get("http://127.0.0.1:8000/livraisons")
+      .then((res) => {
+        setLivraison(res.data);
+      })
+      .catch((error) => console.log(Response.error));
   }, []);
 
   const [show, setShow] = useState(false);
@@ -47,7 +50,7 @@ const Livraison = () => {
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
-                {livraison !== [] ? (
+                {Object.keys(livraison).length === 0 ? (
                   livraison.map((livraison) => (
                     <tbody className="bg-white" key={livraison.id}>
                       <LivraisonList livraisons={livraison} />
